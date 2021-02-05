@@ -3,6 +3,10 @@
   "description": "This extension allows you to limit your time wasted watching Youtube videos. You can also pick certain channels that you can watch.",
   "version": "0.1",
   "manifest_version": 2,
+
+  "web_accessible_resources": [
+    "superSecretKey.txt"
+  ],
   "permissions": [
     "activeTab",
     "storage",

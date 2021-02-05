@@ -22,10 +22,49 @@ async function GetJson(url){
     var json_obj = JSON.parse(await promise0);
     return json_obj;
 }
+async function getTxt(url){
+    var Httpreq = new XMLHttpRequest();
+    Httpreq.open("GET",url,true);
+    Httpreq.onreadystatechange = checkData;
+    Httpreq.send(null);
+    var ans=null;
+    let promise0 = new Promise((resolve, reject) => {
+        function looper() {
+            if (ans == null){
+                setTimeout(looper,100);
+            }else {
+                resolve(ans);
+            }
+        }
+        looper();
+
+    });
+    function checkData()
+    {
+        ans=Httpreq.responseText;
+    }
+    var text = await promise0;
+    return text;
+}
+function readSingleFile(e) {
+    var file = e.target.files[0];
+    if (!file) {
+        return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var contents = e.target.result;
+        displayContents(contents);
+    };
+    reader.readAsText(file);
+}
+
 var vidId = "";
 var secs = 0;
 var csecs = 60;
+
 async function f() {
+    var secretKey = (await getTxt(chrome.runtime.getURL("superSecretKey.txt"))).split(';')[1];
     while (true) {
         let isYoutube = new Promise((resolve, reject) => {
             chrome.tabs.getSelected(null,function(tab) {
@@ -47,7 +86,7 @@ async function f() {
             await new Promise(resolve => setTimeout(resolve, 1000));
             continue;
         }
-        let url = "https://www.googleapis.com/youtube/v3/videos?key=AIzaSyD7RTxocv7aqfKE0BXWrRJIMYf9hFldyYk&part=snippet&id=" + vidId;
+        let url = "https://www.googleapis.com/youtube/v3/videos?key="+secretKey+"&part=snippet&id=" + vidId;
         let json = await GetJson(url);
         let name = json.items[0].snippet.channelTitle;
         let promise0 = new Promise((resolve, reject) => {
