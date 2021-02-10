@@ -64,8 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
             ne.addEventListener('input', updateList);
         }
     });
-    var checkNum= document.getElementById('num');
-        checkNum.addEventListener('input', updateValue);
+    const checkNum = document.getElementById('num');
+    checkNum.addEventListener('input', updateValue);
     chrome.storage.local.get(['limit'], function(result) {
         let limit= result.limit;
         chrome.storage.local.get(['cur'], function(result) {
@@ -91,7 +91,7 @@ function minus() {
         if (typeof list == "undefined"){
             list = [];
         }
-        else if (list.length!=0){
+        else if (list.length!==0){
             list.pop();
         }
         chrome.storage.local.set({'list': list}, function() {
